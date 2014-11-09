@@ -8,6 +8,7 @@
       body {
         margin: 0px;
         overflow: hidden;
+        /*background-color:whites;*/
       }
       #example {
         position: absolute;
@@ -19,12 +20,15 @@
     </style>
   </head>
   <body>
-    <div id="example"></div>
+
+    <div id="example"><iframe style="position:absolute; left:5%; top:25%" width="40%" height="40%" src="//www.youtube.com/embed/mSoPJevJyeE" frameborder="0" allowfullscreen></iframe><iframe style="position:absolute; right:5%; top:25%;" width="40%" height="40%" src="//www.youtube.com/embed/mSoPJevJyeE" frameborder="0" allowfullscreen></iframe></div>
 
   <script src="js/third-party/threejs/three.min.js"></script>
   <script src="js/third-party/threejs/StereoEffect.js"></script>
   <script src="js/third-party/threejs/DeviceOrientationControls.js"></script>
   <script src="js/third-party/threejs/OrbitControls.js"></script>
+  <script src="http://code.createjs.com/soundjs-0.5.2.min.js"></script>
+  <script src="//ajax.googleapis.com/ajax/libs/jquery/2.1.1/jquery.min.js"></script>
 
   <script>
     var camera, scene, renderer;
@@ -90,7 +94,7 @@
       var material = new THREE.MeshPhongMaterial({
         color: 0xffffff,
         specular: 0xffffff,
-        shininess: 20,
+        shininess: 15,
         shading: THREE.FlatShading,
         map: texture
       });
@@ -103,6 +107,17 @@
 
       window.addEventListener('resize', resize, false);
       setTimeout(resize, 1);
+
+
+      // var geometry1 = new THREE.BoxGeometry( 10, 10, 10 );
+      // var material1 = new THREE.MeshBasicMaterial( { color: 0x00ff00 } );
+      // var cube = new THREE.Mesh( geometry1, material1 );
+      // scene.add( cube );
+
+      // camera.position.z = 100;
+
+
+
     }
 
     function resize() {
@@ -130,6 +145,7 @@
 
     function animate(t) {
       requestAnimationFrame(animate);
+      // cube.rotation += 0.1;
 
       update(clock.getDelta());
       render(clock.getDelta());
@@ -146,6 +162,40 @@
         container.webkitRequestFullscreen();
       }
     }
+
+  </script>
+  <script>
+    if (navigator.geolocation) {
+        navigator.geolocation.getCurrentPosition(showPosition);
+    }
+
+    function showPosition(position) {
+      // x.innerHTML = "Latitude: " + position.coords.latitude + 
+      // "<br>Longitude: " + position.coords.longitude; 
+
+      $.ajax({
+        type: "GET",
+        url: "//api.forecast.io/forecast/df7ae4df889c66e46860a29ddf13a290/"+ position.coords.latitude+","+ position.coords.longitude, 
+        // crossDomain: true,
+        //clipped.me/algorithm/clippedapi.php?url="+data,
+        dataType:'json',
+        headers:{
+          'origin': 'http://localhost:8080/'
+        },
+        success: function(summary) {
+          alert(data["currently"]["temperature"]);
+        }
+      });
+
+      // $.getJSON(", function (data) {
+      //     alert(data["currently"]["temperature"]);
+
+      // });
+    }
+
+    
+
+
   </script>
   </body>
 </html>
